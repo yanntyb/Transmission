@@ -7,8 +7,8 @@ export type CallBackListenerCallbackType<T extends  EventDetailType> = (data: Li
 export abstract class CallbackListener<T extends EventDetailType> extends Listener<T> {
     public callback: CallBackListenerCallbackType<T>;
 
-    protected constructor(callback: CallBackListenerCallbackType<T>, transmitter?: Transmitter<T>) {
-        super(transmitter);
+    protected constructor(callback: CallBackListenerCallbackType<T>, ...transmitter: Transmitter<T>[]) {
+        super(...transmitter);
         this.callback = callback.bind((this));
 
     }

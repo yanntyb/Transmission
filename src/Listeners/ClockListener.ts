@@ -14,7 +14,7 @@ export class ClockListener extends Listener<ClockEventDetailType> {
 
     public receiveUsing(data:  ListenerReceiveType<ClockEventDetailType>)
     {
-        return;
+        return data;
     }
 
 }

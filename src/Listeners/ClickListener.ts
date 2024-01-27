@@ -5,17 +5,17 @@ import {CallbackListener, CallBackListenerCallbackType} from "./CallbackListener
 export class ClickListener extends CallbackListener<ClickEventDetailType> {
 
 
-    constructor(callback: CallBackListenerCallbackType<ClickEventDetailType>, transmitter?: ClickTransmitter) {
-        super(callback, transmitter);
+    constructor(callback: CallBackListenerCallbackType<ClickEventDetailType>, ...transmitters: ClickTransmitter[]) {
+        super(callback, ...transmitters);
     }
 
     public listenTo(transmitter?: ClickTransmitter): Transmitter<ClickEventDetailType> {
-        return transmitter ? transmitter : ClickTransmitter.make().listen();
+        return transmitter ? transmitter : ClickTransmitter.make().startListening();
     }
 
 
-    public static make(callback: CallBackListenerCallbackType<ClickEventDetailType>, transmitter?: Transmitter<ClickEventDetailType>): ClickListener
+    public static make(callback: CallBackListenerCallbackType<ClickEventDetailType>, ...transmitters: Transmitter<ClickEventDetailType>[]): ClickListener
     {
-        return new ClickListener(callback, transmitter);
+        return new ClickListener(callback, ...transmitters);
     }
 }

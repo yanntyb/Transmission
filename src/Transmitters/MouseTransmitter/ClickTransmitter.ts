@@ -36,7 +36,7 @@ export class ClickTransmitter extends Transmitter<ClickEventDetailType>   {
 
     public getEventName(): string 
     {
-        return 'ClickTransmitter';
+        return 'ClickTransmitter' + this.uudi;
     }
     
 }

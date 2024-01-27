@@ -10,18 +10,23 @@ export type ListenerReceiveType<T extends EventDetailType> = {
 
 export abstract class Listener<T extends EventDetailType> {
     
-    public transmitter: Transmitter<T>;
+    public transmitters: Transmitter<T>[];
 
     /**
-     * @param transmitter
      * @protected
+     * @param transmitters
      */
-    protected constructor(transmitter?: Transmitter<T>) {
-        // Store the transmitter this listener has to listen
-        this.transmitter = this.listenTo(transmitter);
+    protected constructor(...transmitters: Transmitter<T>[]) {
+        // Store the transmitters this listener has to listen
+        this.transmitters =  transmitters.map(
+            (transmitter) => {
+                console.log(transmitter);
+                return this.listenTo(transmitter)
+            }
+        ) ;
 
         //Start the transmission
-        Switcher.for(this.transmitter).switch(true);
+        Switcher.for(...this.transmitters).switch(true);
 
         //Listen to the transmitter event
         this.listen();
@@ -42,7 +47,7 @@ export abstract class Listener<T extends EventDetailType> {
         EventManager.listenToTransmitter(
             //We have to bind this bring access to this inside callback execution
             this.receiveUsing.bind(this),
-            this.transmitter
+            ...this.transmitters
         )
     }
 

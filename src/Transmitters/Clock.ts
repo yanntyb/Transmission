@@ -15,7 +15,7 @@ export type ClockEventDetailType = EventDetailType & {
     latestTimestamp: number
 }
 
-export class Clock extends Transmitter<ClockEventDetailType>  implements Switchable  {
+export class Clock extends Transmitter<ClockEventDetailType> implements Switchable  {
 
     public timer?: number;
     public configuration: ClockConfigurationType = {
@@ -23,6 +23,10 @@ export class Clock extends Transmitter<ClockEventDetailType>  implements Switcha
     }
     public count: number = 0;
     public latestTimestamp = 0;
+
+    constructor() {
+        super();
+    }
 
     public transmitUsing(transmit: () => void): void {
         this.timer = window.setInterval(

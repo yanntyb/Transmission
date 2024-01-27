@@ -17,10 +17,10 @@ export class MoveTransmitter extends Transmitter<MoveEventDetailType>   {
     public position: PositionType = {x: 0,y: 0}
 
     public transmitUsing(transmit: () => void): void {
-        EventManager.listen('mousemove', ({ event}) => {
+        EventManager.listen<MoveEventDetailType>('mousemove', ({ data}) => {
             this.position = {
-                x: event.clientX,
-                y: event.clientY,
+                x: data?.lastPosition.x ?? 0,
+                y: data?.lastPosition.y ?? 0,
             }
             transmit();
         })

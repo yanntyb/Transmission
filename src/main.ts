@@ -1,8 +1,20 @@
 import './style.css';
 
-import {ClickListener} from "./Listeners/ClickListener.ts";
+import {BaseCallBackListener} from "./Listeners/BaseCallBackListener.ts";
+import {ClickTransmitter} from "./Transmitters/MouseTransmitter/ClickTransmitter.ts";
 
 
 (() => {
-      ClickListener.make(() => console.log('ici'),);
+
+
+      BaseCallBackListener.make(
+          (data) => {
+              console.log(data.data);
+          },
+            ClickTransmitter.make().startListening(),
+            ClickTransmitter.make().startListening(),
+            ClickTransmitter.make().startListening(),
+            ClickTransmitter.make().startListening(),
+      );
+
 })();

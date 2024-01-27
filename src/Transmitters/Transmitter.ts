@@ -28,7 +28,7 @@ export abstract class Transmitter<DataSendType> implements Switchable{
       return EventManager.send<DataSendType>(this.getEventName(), this.getData());
     }
 
-    public listen() {
+    public startListening() {
       this.transmissionOn = true;
       this.transmitUsing(this.receive.bind(this));
       return this;
