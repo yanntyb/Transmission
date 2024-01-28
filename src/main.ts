@@ -3,9 +3,6 @@ import './style.css';
 import {Extractor} from "./Listeners/Transformers/Extractor.ts";
 import {EventManager} from "./EventManager.ts";
 import {Clock} from "./Transmitters/Clock.ts";
-import {ClockListener} from "./Listeners/ClockListener.ts";
-import {CallbackListener} from "./Listeners/CallbackListener.ts";
-import {BaseCallBackListener} from "./Listeners/BaseCallBackListener.ts";
 
 
 const createDiv = (): HTMLDivElement => {
@@ -15,10 +12,16 @@ const createDiv = (): HTMLDivElement => {
     return div;
 }
 
-(() => {
+const transformDivs = (callback: (div: HTMLDivElement, i: number) => void, ...divs: HTMLDivElement[]) => {
+    divs.forEach(callback)
+    return divs;
+}
+
+
+    (() => {
 
     const clock = Clock.make({
-        getTimeCallback: () => 100
+        getTimeCallback: () => 10
     }).startListening();
 
     const CLOCK_COUNT = 'clock' + clock.getEventName();
@@ -29,7 +32,8 @@ const createDiv = (): HTMLDivElement => {
                 EventManager.send(CLOCK_COUNT, {
                     detail: {
                          data: {
-                             data: Math.cos(data),
+                             cos: 100 * (1 + Math.cos(data / 10)),
+                             sin: 100 * (1 + Math.sin(data / 10)),
                              originalData: data
                          }
                     }
@@ -41,24 +45,22 @@ const createDiv = (): HTMLDivElement => {
 
       const divs: HTMLDivElement[] = [];
 
-      EventManager.listen(CLOCK_COUNT, ({data}) => {
-         const div = createDiv();
-         divs.push(div);
-         div.style.marginTop = data?.detail.data.data * 20 + 'px';
-      });
+
+    divs.push(createDiv());
 
       EventManager.listen(CLOCK_COUNT, ({data}) => {
-          divs.forEach((div, i) => {
-              div.style.marginLeft = i * 10 + 'px';
-          })
+          transformDivs((div) => {
+              const cos = data.detail.data.cos
+              div.style.marginLeft =  cos + "px";
+          }, ...divs)
+      });
+      EventManager.listen(CLOCK_COUNT, ({data}) => {
+          transformDivs((div) => {
+              const sin = data.detail.data.sin
+              div.style.marginTop = 2 + sin + "px";
+          }, ...divs)
       });
 
-    EventManager.listen(CLOCK_COUNT, ({data}) => {
-        divs.forEach((div) => {
-            const left = parseInt(getComputedStyle(div).marginLeft);
-            div.style.marginLeft = left + (-10 * data?.detail.data.originalData) + "px";
-        })
-      });
 
 
 

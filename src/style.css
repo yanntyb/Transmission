@@ -9,7 +9,7 @@ body {
 
 .cursor {
   position: absolute;
-  width: 10px;
-  height: 10px;
+  width: 1vw;
+  height: 1vw;
   background-color: black;
 }
