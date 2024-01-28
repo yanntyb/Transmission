@@ -2,9 +2,7 @@ import { EventManager } from "../../EventManager.ts";
 import { Transmitter } from "../Transmitter.ts";
 import {EventDetailType} from "../Clock.ts";
 
-export type ClickEventDetailType = EventDetailType & {
-    uuid: string;
-}
+export type ClickEventDetailType = EventDetailType<{}>
 
 
 export class ClickTransmitter extends Transmitter<ClickEventDetailType>   {
@@ -27,7 +25,7 @@ export class ClickTransmitter extends Transmitter<ClickEventDetailType>   {
 
     public sendDataUsing()
     {
-        return () => ({uuid: this.uudi});
+        return () => ({detail: {uuid: this.uudi}});
     }
     
     public canTrigger(): boolean {

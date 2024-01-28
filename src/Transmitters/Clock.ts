@@ -5,27 +5,30 @@ type ClockConfigurationType = {
     getTimeCallback: () => number;
 }
 
+export type DetailType<T> = T;
 
-export type EventDetailType = {}
+export type EventDetailType<T> = {detail: DetailType<T>}
 
 
-export type ClockEventDetailType = EventDetailType & {
+export type ClockEventDetailType = EventDetailType<{
     count: number;
     timer: number;
     latestTimestamp: number
-}
+}>
 
 export class Clock extends Transmitter<ClockEventDetailType> implements Switchable  {
 
     public timer?: number;
-    public configuration: ClockConfigurationType = {
+    public config: ClockConfigurationType = {
         getTimeCallback: () => 1000,
     }
     public count: number = 0;
     public latestTimestamp = 0;
 
-    constructor() {
+    constructor(configuration?: ClockConfigurationType) {
         super();
+        let baseConfig: ClockConfigurationType  = {getTimeCallback: () => 1};
+        this.config = configuration ? configuration : baseConfig;
     }
 
     public transmitUsing(transmit: () => void): void {
@@ -35,21 +38,23 @@ export class Clock extends Transmitter<ClockEventDetailType> implements Switchab
                 this.latestTimestamp =  new Date().getTime();
                 transmit();
             },
-            this.configuration.getTimeCallback()
+            this.config.getTimeCallback()
         );
     }
 
-    public static make(): Clock
+    public static make(configuration?: ClockConfigurationType): Clock
     {
-        return new Clock();
+        return new Clock(configuration);
     }
 
-    public sendDataUsing()
+    public sendDataUsing(): () => ClockEventDetailType
     {
         return () => ({
-            count: this.count,
-            timer: this.timer ?? 0,
-            latestTimestamp: this.latestTimestamp,
+            detail: {
+                count: this.count,
+                timer: this.timer ?? 0,
+                latestTimestamp: this.latestTimestamp,
+            }
         });
     }
     

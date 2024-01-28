@@ -23,8 +23,6 @@ export class EventManager {
         return types.map((type: string) => {
             return window.addEventListener(type, (e: unknown) => {
                 const event = e as EventType<EventDetailsType>;
-
-
                 // Case where callback is an empty anonymous function () => {}
                 if (typeof event.detail.data !== 'function') {
                     return callback({event});
@@ -42,10 +40,11 @@ export class EventManager {
      * @param callback
      * @returns
      */
-    public static listenToTransmitter<D extends EventDetailType>(
+    public static listenToTransmitter<D extends EventDetailType<any>>(
         callback: (detail: {data?: D, event: Event} ) => void, ...transmitters: Transmitter<D>[]
     )
     {
+
         return transmitters.map((transmitter: Transmitter<D>) => {
             return EventManager.listen(transmitter.getEventName(), callback);
         })

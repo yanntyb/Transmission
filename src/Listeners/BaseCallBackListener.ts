@@ -1,23 +1,22 @@
 import { Transmitter } from "../Transmitters/Transmitter";
-import {ClickEventDetailType, ClickTransmitter} from "../Transmitters/MouseTransmitter/ClickTransmitter.ts";
 import {CallbackListener, CallBackListenerCallbackType} from "./CallbackListener.ts";
+import {EventDetailType} from "../Transmitters/Clock.ts";
 
-export class BaseCallBackListener extends CallbackListener<ClickEventDetailType> {
+export class BaseCallBackListener<T extends EventDetailType<any>> extends CallbackListener<T> {
 
 
-    constructor(callback: CallBackListenerCallbackType<ClickEventDetailType>, ...transmitter: ClickTransmitter[]) {
+    constructor(callback: CallBackListenerCallbackType<T>, ...transmitter: Transmitter<T>[]) {
         super(callback, ...transmitter);
     }
 
-    public listenTo(transmitter?: ClickTransmitter): Transmitter<ClickEventDetailType> {
-        return transmitter ? transmitter : ClickTransmitter.make().startListening();
+    public listenTo(...transmitters: Transmitter<T>[]): Transmitter<T>[] {
+        return transmitters;
     }
 
-
-    public static make(
-        callback: CallBackListenerCallbackType<ClickEventDetailType>,
-        ...transmitters: Transmitter<ClickEventDetailType>[]
-    ): BaseCallBackListener
+    public static make<T extends EventDetailType<any>>(
+        callback: CallBackListenerCallbackType<T>,
+        ...transmitters: Transmitter<T>[]
+    ): BaseCallBackListener<T>
     {
         return new BaseCallBackListener(callback, ...transmitters);
     }

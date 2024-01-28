@@ -8,8 +8,9 @@ export class ClockListener extends Listener<ClockEventDetailType> {
         super();
     }
 
-    public listenTo(): Transmitter<ClockEventDetailType> {
-        return Clock.make();
+    public listenTo(... transmitter: Transmitter<ClockEventDetailType>[]): Transmitter<ClockEventDetailType>[]
+    {
+        return transmitter.length ? transmitter : [Clock.make()];
     }
 
     public receiveUsing(data:  ListenerReceiveType<ClockEventDetailType>)

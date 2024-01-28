@@ -1,8 +1,9 @@
 import { EventManager } from "../EventManager";
 import { Switchable, Switcher } from "../Switchs/Switcher";
+import {EventDetailType} from "./Clock.ts";
 
 
-export abstract class Transmitter<DataSendType> implements Switchable{
+export abstract class Transmitter<DataSendType extends EventDetailType<any>> implements Switchable{
 
     public date: Date;
     public uudi: string;
@@ -21,13 +22,17 @@ export abstract class Transmitter<DataSendType> implements Switchable{
 
     public abstract getEventName(): string;
 
-    public receive() {
+    private receive() {
       if (!this.canTrigger() || !this.transmissionOn || !this.switcher?.state) return;
 
       this.receivesAt.push(this.date.getTime());
+
       return EventManager.send<DataSendType>(this.getEventName(), this.getData());
     }
 
+    /**
+     *
+     */
     public startListening() {
       this.transmissionOn = true;
       this.transmitUsing(this.receive.bind(this));
@@ -36,7 +41,7 @@ export abstract class Transmitter<DataSendType> implements Switchable{
 
 
      /**
-     * Define the confdition to trigger transmittion,
+     * Define the condition to trigger transmit,
      * Call transmit() when u want to trigger transmission
      * 
      * @param transmit 
@@ -52,14 +57,21 @@ export abstract class Transmitter<DataSendType> implements Switchable{
       return this.sendDataUsing()();
     }
 
+    /**
+     * Define whenever this transmitter work
+     */
     public canTrigger(): boolean
     {
       return true;
     }
 
-    public switchUshing(switcher: Switcher)
+    /**
+     * Use to define a Switcher capable of switching if this transmitter can work or not
+     * @param switcher
+     */
+    public switchUsing(switcher: Switcher)
     {
-      this.switcher = switcher;
+      this.switcher = switcher.switch(true);
       return this;
     }
 

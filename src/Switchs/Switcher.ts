@@ -1,5 +1,5 @@
 export interface Switchable {
-    switchUshing: (switcher: Switcher) => Switchable;
+    switchUsing: (switcher: Switcher) => Switchable;
 }
 
 export class Switcher {
@@ -14,7 +14,7 @@ export class Switcher {
     {
         const switcher = new Switcher(switchables);
 
-        switchables.forEach((s: Switchable )=> s.switchUshing(switcher))
+        switchables.forEach((s: Switchable )=> s.switchUsing(switcher))
         return switcher;
     }
 

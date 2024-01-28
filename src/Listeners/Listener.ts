@@ -3,12 +3,12 @@ import {  EventDetailType } from "../Transmitters/Clock";
 import { Transmitter } from "../Transmitters/Transmitter";
 import {Switcher} from "../Switchs/Switcher.ts";
 
-export type ListenerReceiveType<T extends EventDetailType> = {
+export type ListenerReceiveType<T extends EventDetailType<any>> = {
     data?: T | undefined,
-    event: Event
+    event?: Event
 }
 
-export abstract class Listener<T extends EventDetailType> {
+export abstract class Listener<T extends EventDetailType<any>> {
     
     public transmitters: Transmitter<T>[];
 
@@ -18,12 +18,7 @@ export abstract class Listener<T extends EventDetailType> {
      */
     protected constructor(...transmitters: Transmitter<T>[]) {
         // Store the transmitters this listener has to listen
-        this.transmitters =  transmitters.map(
-            (transmitter) => {
-                console.log(transmitter);
-                return this.listenTo(transmitter)
-            }
-        ) ;
+        this.transmitters =  this.listenTo(...transmitters);
 
         //Start the transmission
         Switcher.for(...this.transmitters).switch(true);
@@ -36,7 +31,7 @@ export abstract class Listener<T extends EventDetailType> {
     /**
      * Used to Set witch event this listener has to listen
      */
-    public abstract listenTo(transmitter?: Transmitter<T>): Transmitter<T>;
+    public abstract listenTo(...transmitter: Transmitter<T>[]): Transmitter<T>[];
 
     /**
      * Listen to the transmitter event and set the callback executed when this listener catch an event

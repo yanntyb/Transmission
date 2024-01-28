@@ -9,13 +9,19 @@ export class ClickListener extends CallbackListener<ClickEventDetailType> {
         super(callback, ...transmitters);
     }
 
-    public listenTo(transmitter?: ClickTransmitter): Transmitter<ClickEventDetailType> {
-        return transmitter ? transmitter : ClickTransmitter.make().startListening();
+    public listenTo(...transmitters: ClickTransmitter[]): Transmitter<ClickEventDetailType>[] {
+        return transmitters.length ? transmitters : [ClickTransmitter.make().startListening()];
     }
 
 
-    public static make(callback: CallBackListenerCallbackType<ClickEventDetailType>, ...transmitters: Transmitter<ClickEventDetailType>[]): ClickListener
+    public static make(callback: CallBackListenerCallbackType<ClickEventDetailType>, ...transmitters: ClickTransmitter[]): ClickListener
     {
         return new ClickListener(callback, ...transmitters);
     }
+
+    public sendDataUsing()
+    {
+        return () => ({})
+    }
+
 }

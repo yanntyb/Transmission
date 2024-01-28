@@ -7,9 +7,9 @@ export type PositionType = {
     y: number;
 }
 
-export type MoveEventDetailType = EventDetailType & {
+export type MoveEventDetailType = EventDetailType<{
     lastPosition: PositionType;
-}
+}>;
 
 
 export class MoveTransmitter extends Transmitter<MoveEventDetailType>   {
@@ -18,10 +18,12 @@ export class MoveTransmitter extends Transmitter<MoveEventDetailType>   {
 
     public transmitUsing(transmit: () => void): void {
         EventManager.listen<MoveEventDetailType>('mousemove', ({ data}) => {
-            this.position = {
-                x: data?.lastPosition.x ?? 0,
-                y: data?.lastPosition.y ?? 0,
-            }
+
+            console.log(data);
+            /*this.position = {
+                x: data.detail.lastPosition.x,
+                y: data.detail.lastPosition.y,
+            }*/
             transmit();
         })
     }
@@ -35,9 +37,11 @@ export class MoveTransmitter extends Transmitter<MoveEventDetailType>   {
     {
         return () => (
             {
-                lastPosition: {
-                    x: this.position.x,
-                    y: this.position.y
+                detail: {
+                    lastPosition: {
+                        x: this.position.x,
+                        y: this.position.y
+                    }
                 }
             }
         );
