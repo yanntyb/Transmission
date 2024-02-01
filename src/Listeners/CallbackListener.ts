@@ -14,7 +14,7 @@ export abstract class CallbackListener<T extends EventDetailType<any>> extends L
     }
 
     public receiveUsing(data: ListenerReceiveType<T>) {
-        return this.callback(data)
+        return new Promise<ListenerReceiveType<T>>(() => this.callback(data))
     }
 
 }

@@ -13,9 +13,9 @@ export class ClockListener extends Listener<ClockEventDetailType> {
         return transmitter.length ? transmitter : [Clock.make()];
     }
 
-    public receiveUsing(data:  ListenerReceiveType<ClockEventDetailType>)
+    public async receiveUsing(data:  ListenerReceiveType<ClockEventDetailType>)
     {
-        return data;
+        return new Promise<ListenerReceiveType<ClockEventDetailType>>(() => data);
     }
 
 }

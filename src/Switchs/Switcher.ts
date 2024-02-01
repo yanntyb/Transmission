@@ -1,20 +1,20 @@
-export interface Switchable {
-    switchUsing: (switcher: Switcher) => Switchable;
+export interface Switchable<T> {
+    switchUsing: (switcher: Switcher<any>) => Switchable<T>;
 }
 
-export class Switcher {
+export class Switcher<T extends Switchable<any>> {
     public state: boolean = false;
-    public switchables: Switchable[];
+    public switchables: T[];
 
-    constructor(switchable: Switchable[]) {
+    constructor(switchable: T[]) {
         this.switchables = switchable;
     }
 
-    public static for(...switchables: Switchable[]): Switcher
+    public static for<T extends Switchable<any>>(...switchables: T[]): Switcher<T>
     {
-        const switcher = new Switcher(switchables);
+        const switcher = new Switcher<T>(switchables);
 
-        switchables.forEach((s: Switchable )=> s.switchUsing(switcher))
+        switchables.forEach((s: Switchable<any>)=> s.switchUsing(switcher))
         return switcher;
     }
 

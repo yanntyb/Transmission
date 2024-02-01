@@ -16,11 +16,11 @@ export type ClockEventDetailType = EventDetailType<{
     latestTimestamp: number
 }>
 
-export class Clock extends Transmitter<ClockEventDetailType> implements Switchable  {
+export class Clock extends Transmitter<ClockEventDetailType> implements Switchable<Clock>  {
 
     public timer?: number;
     public config: ClockConfigurationType = {
-        getTimeCallback: () => 1000,
+        getTimeCallback: () => 0,
     }
     public count: number = 0;
     public latestTimestamp = 0;
@@ -32,14 +32,23 @@ export class Clock extends Transmitter<ClockEventDetailType> implements Switchab
     }
 
     public transmitUsing(transmit: () => void): void {
-        this.timer = window.setInterval(
-            () => {
-                this.count++;
-                this.latestTimestamp =  new Date().getTime();
-                transmit();
-            },
-            this.config.getTimeCallback()
-        );
+
+        requestAnimationFrame(() => {
+            this.count++;
+            this.latestTimestamp =  new Date().getTime();
+            transmit();
+
+            if (!this.config.getTimeCallback()) {
+                this.transmitUsing(transmit);
+                return;
+            }
+
+            window.setTimeout(() => {
+                this.transmitUsing(transmit);
+
+            }, this.config.getTimeCallback());
+        });
+
     }
 
     public static make(configuration?: ClockConfigurationType): Clock

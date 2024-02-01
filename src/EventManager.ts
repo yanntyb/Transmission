@@ -11,7 +11,7 @@ export class EventManager {
     
     public static send<EventDetailsType>(type: string, data: EventDetailsType) {
         const event = new CustomEvent(type, {detail: { data: () => data }});
-        return window.dispatchEvent(event);
+        return new Promise(() => window.dispatchEvent(event)) ;
     }
 
     public static listen<EventDetailsType>(

@@ -16,28 +16,11 @@ export class Extractor<T extends EventDetailType<any>> extends  Transformer<T> {
         ...transmitters: Transmitter<T>[]) {
         super(callback, ...transmitters);
         this.extractKey = extractKey;
-
     }
 
-
-    public static make<T extends EventDetailType<any>>(
-        extractKey: EventDetailKeyOf<T>,
-        callback: CallBackListenerCallbackType<T>,
-        ...transmitters: Transmitter<T>[]
-    ): Extractor<T>
+    public extractUsing(data: ListenerReceiveType<T>): ListenerReceiveType<T>
     {
-        return new Extractor(extractKey, callback, ...transmitters);
-    }
-
-    public extractUsing(data: ListenerReceiveType<T>): ListenerReceiveType<T> {
-
-
-        if (data.data) {
-            return data.data.detail[this.extractKey];
-        }
-
-
-        return data;
+        return data.data ? {data: data.data.detail[this.extractKey]} : data;
     }
 
 }

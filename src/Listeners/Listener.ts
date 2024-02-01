@@ -50,6 +50,6 @@ export abstract class Listener<T extends EventDetailType<any>> {
      * Callback executed when listener catch an event he is listening to
      * @param detail
      */
-    abstract receiveUsing(detail: ListenerReceiveType<T>): void;
+    abstract receiveUsing(detail: ListenerReceiveType<T>): Promise<ListenerReceiveType<T>>;
 
 }

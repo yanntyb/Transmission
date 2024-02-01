@@ -12,12 +12,4 @@ export class BaseCallBackListener<T extends EventDetailType<any>> extends Callba
     public listenTo(...transmitters: Transmitter<T>[]): Transmitter<T>[] {
         return transmitters;
     }
-
-    public static make<T extends EventDetailType<any>>(
-        callback: CallBackListenerCallbackType<T>,
-        ...transmitters: Transmitter<T>[]
-    ): BaseCallBackListener<T>
-    {
-        return new BaseCallBackListener(callback, ...transmitters);
-    }
 }

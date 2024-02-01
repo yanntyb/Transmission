@@ -5,11 +5,10 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
+  padding: 5%;
+
 }
 
-.cursor {
-  position: absolute;
-  width: 1vw;
-  height: 1vw;
-  background-color: black;
+canvas {
+  margin-left: 40%;
 }

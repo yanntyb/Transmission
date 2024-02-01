@@ -3,12 +3,12 @@ import { Switchable, Switcher } from "../Switchs/Switcher";
 import {EventDetailType} from "./Clock.ts";
 
 
-export abstract class Transmitter<DataSendType extends EventDetailType<any>> implements Switchable{
+export abstract class Transmitter<DataSendType extends EventDetailType<any>> implements Switchable<any>{
 
     public date: Date;
     public uudi: string;
     public transmissionOn: boolean = false;
-    public switcher?: Switcher;
+    public switcher?: Switcher<any>;
 
     /**
      * Log timestamp when receive methode get called
@@ -27,7 +27,7 @@ export abstract class Transmitter<DataSendType extends EventDetailType<any>> imp
 
       this.receivesAt.push(this.date.getTime());
 
-      return EventManager.send<DataSendType>(this.getEventName(), this.getData());
+      return  EventManager.send<DataSendType>(this.getEventName(), this.getData());
     }
 
     /**
@@ -69,7 +69,7 @@ export abstract class Transmitter<DataSendType extends EventDetailType<any>> imp
      * Use to define a Switcher capable of switching if this transmitter can work or not
      * @param switcher
      */
-    public switchUsing(switcher: Switcher)
+    public switchUsing(switcher: Switcher<Transmitter<DataSendType>>)
     {
       this.switcher = switcher.switch(true);
       return this;
