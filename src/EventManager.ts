@@ -46,7 +46,7 @@ export class EventManager {
     {
 
         return transmitters.map((transmitter: Transmitter<D>) => {
-            return EventManager.listen(transmitter.getEventName(), callback);
+            return EventManager.listen(transmitter.getEventName() + transmitter.uudi, callback);
         })
     }
 }

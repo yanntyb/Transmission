@@ -27,7 +27,7 @@ export abstract class Transmitter<DataSendType extends EventDetailType<any>> imp
 
       this.receivesAt.push(this.date.getTime());
 
-      return  EventManager.send<DataSendType>(this.getEventName(), this.getData());
+      return  EventManager.send<DataSendType>(this.getEventName() + this.uudi, this.getData());
     }
 
     /**
